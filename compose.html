@@ -142,14 +142,9 @@
 </div>
 
 <script>
-/* ---- HIER EINSTELLEN (einmalig, zusammen mit frommetoyou.html) ----
-   1. Öffne https://extendsclass.com/json-storage.html in einem Browser
-      (kein Login nötig).
-   2. Füge dies in den JSON-Editor ein und klicke "Save":  {"messages": []}
-   3. Du bekommst eine URI wie https://json.extendsclass.com/bin/<deine-id>
-   4. Trage diese URI hier UND in frommetoyou.html bei JSONBLOB_URL ein.
-------------------------------------------------------------------- */
-var JSONBLOB_URL = "https://json.extendsclass.com/bin/593713c04fa9";
+/* ---- Backend: Firebase Realtime Database (dieselbe URL wie in
+   frommetoyou.html). Speichert die Nachrichten direkt unter /messages.json ---- */
+var JSONBLOB_URL = "https://frommetoyou-note-33974-default-rtdb.europe-west1.firebasedatabase.app/messages.json";
 
 var input = document.getElementById("input");
 var sendBtn = document.getElementById("sendBtn");
@@ -223,7 +218,7 @@ if (!JSONBLOB_URL || JSONBLOB_URL.indexOf("PASTE_YOUR") !== -1) {
   fetch(JSONBLOB_URL, { cache: "no-store" })
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function (data) {
-      messages = (data && data.messages) || [];
+      messages = data || [];
       ready = true;
       updateSendButton();
       var latest = messages[0];
@@ -247,7 +242,7 @@ sendBtn.addEventListener("click", function () {
   fetch(JSONBLOB_URL, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages: newMessages })
+    body: JSON.stringify(newMessages)
   })
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function () {

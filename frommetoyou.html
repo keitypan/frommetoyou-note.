@@ -145,8 +145,8 @@
 </div>
 
 <script>
-/* ---- HIER EINSTELLEN (dieselbe URL wie in compose.html) ---- */
-var JSONBLOB_URL = "https://json.extendsclass.com/bin/593713c04fa9";
+/* ---- Backend: Firebase Realtime Database (dieselbe URL wie in compose.html) ---- */
+var JSONBLOB_URL = "https://frommetoyou-note-33974-default-rtdb.europe-west1.firebasedatabase.app/messages.json";
 
 /* ---- OPTIONAL: WhatsApp-Nummer im internationalen Format, ohne "+" und ohne führende 0 ---- */
 var WHATSAPP_NUMBER = "4915566485019";
@@ -201,7 +201,7 @@ if (!JSONBLOB_URL || JSONBLOB_URL.indexOf("PASTE_YOUR") !== -1) {
   fetch(JSONBLOB_URL, { cache: "no-store" })
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      var latest = data && data.messages && data.messages[0];
+      var latest = data && data[0];
       if (!latest) { showError(); return; }
       showMessage(latest.text, latest.date);
     })
