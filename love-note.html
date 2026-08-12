@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Für Dich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gasoek+One&family=Geist:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #703e94;
+    --card-bg: rgba(255,255,255,0.3);
+    --card-border: rgba(255,255,255,0.2);
+    --heart: rgba(112,62,148,0.1);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    overscroll-behavior: none;
+  }
+  body { display: flex; justify-content: center; background: #b98fe0; }
+  .device {
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  @media (min-width: 431px) {
+    body { min-height: 100vh; padding: 20px 12px 60px; }
+    .device {
+      max-width: 375px;
+      height: 812px;
+      border-radius: 36px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 20px 50px rgba(0,0,0,0.12);
+    }
+  }
+  .bg { position: absolute; inset: -5% -3%; z-index: -1; }
+  .bg img { width: 100%; height: 100%; object-fit: cover; }
+  .bg .blur { position: absolute; inset: 0; backdrop-filter: blur(47px); background: rgba(191,146,223,0.1); }
+
+  .content {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+    padding: calc(24px + env(safe-area-inset-top)) 16px 0;
+    width: 100%; max-width: 375px; box-sizing: border-box;
+    flex: 1; min-height: 0;
+  }
+  .heading {
+    font-family: "Geist", sans-serif; font-weight: 700; font-size: 20px;
+    color: var(--purple); text-align: center; margin: 0; width: 100%;
+  }
+  .card {
+    position: relative; width: 100%; min-height: 300px; max-height: 624px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 32px 16px;
+    box-shadow: 0 16px 18px rgba(145,145,145,0.1), 0 65px 32.5px rgba(145,145,145,0.09);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .pixel-heart {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 271px; height: 241px; z-index: 0; pointer-events: none;
+  }
+  .message {
+    position: relative; z-index: 1; font-family: "Gasoek One", sans-serif;
+    font-size: 36px; line-height: 1.1; color: var(--purple); text-align: center;
+    max-width: 100%; white-space: pre-wrap;
+  }
+  .pill {
+    position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+    z-index: 2; display: flex; align-items: center; gap: 8px;
+    background: white; border-radius: 100px; padding: 4px 10px 4px 4px;
+    box-shadow: 0 4px 15px rgba(210,210,210,0.35); white-space: nowrap;
+  }
+  .pill .avatar {
+    width: 32px; height: 32px; border-radius: 100px; overflow: hidden;
+    background: var(--card-border); flex-shrink: 0;
+  }
+  .pill .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .pill .name { font-size: 18px; color: #101010; font-family: -apple-system, sans-serif; }
+
+  .updated {
+    font-family: "Geist", sans-serif; font-weight: 500; font-size: 16px;
+    color: rgba(255,255,255,0.8); text-align: center; width: 100%; margin: 0;
+  }
+
+  .buttons {
+    display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 375px;
+    box-sizing: border-box; padding: 0 16px calc(32px + env(safe-area-inset-bottom));
+  }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 12px 24px; border-radius: 12px; font-size: 16px;
+    font-weight: 500; font-family: "Geist", sans-serif; text-decoration: none;
+    cursor: pointer; border: none; box-sizing: border-box;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  /* Matches the Button component's Type=Primar states (node 13:260) */
+  .btn-primary { background: #ffffff; color: #703e94; }
+  .btn-primary img { transition: opacity 0.15s ease; }
+  .btn-primary:hover { background: #f7f2ff; }
+  .btn-primary:active { background: #ede5fa; color: rgba(112,62,148,0.8); }
+  .btn-primary:disabled { background: rgba(255,255,255,0.8); color: rgba(112,62,148,0.4); cursor: default; }
+  .btn-primary:disabled img { opacity: 0.4; }
+  /* Matches the Button component's Type=Secondary states */
+  .btn-secondary { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.25); }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.6); }
+  .btn-secondary:active { background: rgba(0,0,0,0.08); border-color: rgba(255,255,255,0.3); }
+  .btn-secondary:disabled { color: rgba(255,255,255,0.35); border-color: rgba(255,255,255,0.1); cursor: default; }
+  .error-state { color: rgba(112,62,148,0.7); font-size: 15px; line-height: 1.6; text-align: center; max-width: 280px; position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="bg">
+    <img id="bgImg" src="Background.png" alt="">
+    <div class="blur"></div>
+  </div>
+
+  <div class="content">
+    <h1 class="heading">Eine Nachricht für dich 👀</h1>
+    <div class="card" id="card">
+      <img class="pixel-heart" src="pixel heart.png" alt="">
+      <p class="message" id="messageText">Lädt…</p>
+      <div class="pill" id="pill" style="display:none">
+        <div class="avatar"><img src="avatar.png" alt=""></div>
+        <span class="name">Katja</span>
+      </div>
+    </div>
+    <p class="updated" id="updatedText" style="display:none"></p>
+  </div>
+
+  <div class="buttons" id="buttons" style="display:none">
+    <a class="btn btn-primary" id="waBtn" href="#">
+      <img src="whatapp icon.png" width="20" height="20" alt="">
+      <span>Auf Whatapp schreiben</span>
+    </a>
+  </div>
+</div>
+
+<script>
+/* ---- HIER EINSTELLEN (dieselbe URL wie in compose.html) ---- */
+var JSONBLOB_URL = "https://jsonblob.com/api/jsonBlob/019ff66b-2a08-7d13-a9f5-33df07165639";
+
+/* ---- OPTIONAL: WhatsApp-Nummer im internationalen Format, ohne "+" und ohne führende 0 ---- */
+var WHATSAPP_NUMBER = "4915566485019";
+
+function timeAgo(dateStr) {
+  var then = new Date(dateStr).getTime();
+  var diffMs = Date.now() - then;
+  if (isNaN(then) || diffMs < 0) return null;
+  var mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "gerade eben";
+  if (mins < 60) return "vor " + mins + (mins === 1 ? " Minute" : " Minuten");
+  var hrs = Math.floor(mins / 60);
+  if (hrs < 24) return "vor " + hrs + (hrs === 1 ? " Stunde" : " Stunden");
+  var days = Math.floor(hrs / 24);
+  return "vor " + days + (days === 1 ? " Tag" : " Tagen");
+}
+
+function fmtDateDE(dateStr) {
+  var d = new Date(dateStr);
+  if (isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" });
+}
+
+function showMessage(text, dateStr) {
+  document.getElementById("messageText").textContent = text;
+  document.getElementById("pill").style.display = "flex";
+  var dateLabel = dateStr ? fmtDateDE(dateStr) : null;
+  var ago = dateStr ? timeAgo(dateStr) : null;
+  if (dateLabel) {
+    var line = "Zuletzt aktualisiert: " + dateLabel;
+    if (ago) line += " (" + ago + ")";
+    var el = document.getElementById("updatedText");
+    el.textContent = line;
+    el.style.display = "block";
+  }
+  document.getElementById("buttons").style.display = "flex";
+  if (WHATSAPP_NUMBER) {
+    document.getElementById("waBtn").href = "https://wa.me/" + WHATSAPP_NUMBER;
+  } else {
+    document.getElementById("waBtn").style.display = "none";
+  }
+}
+
+function showError() {
+  document.getElementById("messageText").outerHTML =
+    '<p class="error-state">Noch keine Nachricht hier — schau später nochmal vorbei.</p>';
+}
+
+if (!JSONBLOB_URL || JSONBLOB_URL.indexOf("PASTE_YOUR") !== -1) {
+  showError();
+} else {
+  fetch(JSONBLOB_URL, { cache: "no-store" })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var latest = data && data.messages && data.messages[0];
+      if (!latest) { showError(); return; }
+      showMessage(latest.text, latest.date);
+    })
+    .catch(function () { showError(); });
+}
+</script>
+</body>
+</html>
