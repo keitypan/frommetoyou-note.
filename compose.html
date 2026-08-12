@@ -186,6 +186,11 @@ input.addEventListener("focus", function () {
 input.addEventListener("blur", function () {
   if (!input.value) input.setAttribute("placeholder", PLACEHOLDER_TEXT);
 });
+/* If every character gets deleted while still typing (not just on blur),
+   bring the placeholder straight back instead of waiting to tap away. */
+input.addEventListener("input", function () {
+  input.setAttribute("placeholder", input.value ? "" : PLACEHOLDER_TEXT);
+});
 
 function timeAgo(dateStr) {
   var then = new Date(dateStr).getTime();
@@ -220,8 +225,12 @@ if (!JSONBLOB_URL || JSONBLOB_URL.indexOf("PASTE_YOUR") !== -1) {
     .then(function (data) {
       messages = data || [];
       ready = true;
-      updateSendButton();
       var latest = messages[0];
+      if (latest) {
+        input.value = latest.text;
+        autoResize();
+      }
+      updateSendButton();
       setUpdatedFrom(latest ? latest.date : null);
     })
     .catch(function () {
@@ -247,8 +256,6 @@ sendBtn.addEventListener("click", function () {
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function () {
       messages = newMessages;
-      input.value = "";
-      autoResize();
       setUpdatedFrom(newMessages[0].date);
       updateSendButton();
     })
